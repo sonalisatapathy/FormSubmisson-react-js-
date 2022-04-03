@@ -291,7 +291,7 @@ const Main = (props) => {
             Submit
           </button>
         </form>
-        {/* <SU datas={formValues} /> */}
+        <ShowData datas={formValues} />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -29,18 +29,19 @@ function App() {
   ];
 
   return (
-    <Routes>
-      {/* <div className="App"> */}
-      {/* <Header /> */}
-      <Route
-        path="/"
-        element={<Main countries={countries} interests={interest} />}
-      />
-      <Route path="showdata-to-user" element={<ShowData />} />
-      {/* <Footer /> */}
-      {/* <ShowData /> */}
-      {/* </div> */}
-    </Routes>
+    <BrowserRouter>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route
+            path="/"
+            element={<Main countries={countries} interests={interest} exact />}
+          />
+          <Route path="showdata-to-user" element={<ShowData />} />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
 
