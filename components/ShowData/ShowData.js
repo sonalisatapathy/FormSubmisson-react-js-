@@ -1,25 +1,55 @@
 import React from "react";
-
+import showData from "./ShowData.module.css";
 const ShowData = (props) => {
+  const { datas, userInterest, selectGender, selectCountry, inputList, phNo } =
+    props;
+  const headings = [
+    "Name",
+    "Email",
+    "D.O.B",
+    "Gender",
+    "Interests",
+    "Address",
+    "City",
+    "Country",
+    "State",
+    "Phone Number",
+  ];
   return (
     <table>
+      <caption>User Details:-</caption>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>D.O.B</th>
-        <th>interests</th>
-        <th>Phone number</th>
+        {headings.map((item, i) => (
+          <th>{item}</th>
+        ))}
       </tr>
 
       <tr>
+        <td>{` ${datas.firstName} ${datas.middleName} ${datas.lastName}`}</td>
+        <td>{datas.email}</td>
+        <td>{datas.dob}</td>
+        <td>{selectGender}</td>
         <td>
-          {props.datas.firstName} {props.datas.middleName}
-          {props.datas.lastName}
+          {userInterest.interests.map((info, i) => (
+            <div key={i}>{info}</div>
+          ))}
         </td>
-        <td>{props.datas.email}</td>
-        <td>{props.datas.dob}</td>
-        <td>{props.datas.interests}</td>
-        {/* // <td>{props.phNums.phone}</td> */}
+        <td>{datas.address}</td>
+        <td>{datas.city}</td>
+        <td>{selectCountry}</td>
+        <td>{datas.state}</td>
+        <td>
+          <tr>
+            {phNo.map((item, i) => (
+              <td>{item}</td>
+            ))}
+          </tr>
+          <tr>
+            {inputList.map((item, i) => (
+              <td>{item.phone}</td>
+            ))}
+          </tr>
+        </td>
       </tr>
     </table>
   );

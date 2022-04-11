@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import classes from "./Main.module.css";
-function ContactDetails() {
-  const [inputList, setInputList] = useState([
-    {
-      phone: "",
-    },
-  ]);
+function ContactDetails(props) {
+  const { setInputList, phNo, inputList, setPhNo } = props;
+  const optionsForPhone = ["", "mobile", "office", "fax"];
   const phoneChaneHandeler = (event, index) => {
     const { name, value } = event.target;
     const list = [...inputList];
     list[index][name] = value;
     setInputList(list);
   };
+
   const addPhNo = () => {
     setInputList([...inputList, { phone: "" }]);
   };
@@ -20,22 +18,18 @@ function ContactDetails() {
     list.splice(index, 1);
     setInputList(list);
   };
+  const phoneTypeHandler = (event) => {
+    const phTypeLists = [...phNo, event.target.value];
+    setPhNo(phTypeLists);
+  };
   return (
     <div className={classes.ipFields}>
       <label>Contact number:-</label>
-      <small>Format: 123-456-7890</small>
+      <small>Format: 1234567890</small>
 
       {inputList.map((item, i) => {
         return (
-          <div
-          // style={{
-          // display: " grid",
-          // columnGap: "30px",
-          // gridTemplateColumns: "auto auto auto",
-          // float: "right",
-          // marginRight:'200px'
-          // }}
-          >
+          <div>
             <select
               key={i}
               style={{
@@ -43,20 +37,22 @@ function ContactDetails() {
                 height: "37px",
                 marginRight: "14px",
               }}
+              onChange={phoneTypeHandler}
             >
-              <option>Mobile</option>
-              <option>Office</option>
-              <option>Fax</option>
+              {optionsForPhone.map((item) => (
+                <option>{item}</option>
+              ))}
             </select>
 
             <input
-              type="tel"
+              type="number"
               id="phone"
               name="phone"
-              pattern="[0-9]{3}-[0-9]{3}[0-9]{4}"
+              min="1111111111"
+              max="999999999999"
               required
               className={classes.phNum}
-              value={item.phone}
+              value={inputList.phone}
               onChange={(event) => phoneChaneHandeler(event, i)}
             />
 

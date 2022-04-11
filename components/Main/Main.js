@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useState } from "react";
 import ShowData from "../ShowData/ShowData";
-
 import ContactDetails from "./ContactDetails";
-import Interests from "./Interests";
+import Interest from "./Interest";
+
 import classes from "./Main.module.css";
 
 const Main = (props) => {
-  const navigate = useNavigate();
   const intialValues = {
     firstName: "",
     middleName: "",
@@ -16,40 +14,37 @@ const Main = (props) => {
     password: "",
     reEnterPwd: "",
     dob: "",
-    gender: "",
-    interests: "",
-    // city: "",
+    address: "",
+    city: "",
   };
   const [formValues, setFormValues] = useState(intialValues);
+  const [selectCountry, setSelectCountry] = useState();
+  const [selectGender, setSelectGender] = useState();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-
+  const [userInterest, setUserInterest] = useState({
+    interests: [],
+  });
+  const [inputList, setInputList] = useState([
+    {
+      phone: "",
+    },
+  ]);
+  const [phNo, setPhNo] = useState([]);
   const changeValHandler = (event) => {
-    // console.log(event.target.value);
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
-    console.log(formValues);
+  };
+  const genderHandler = (event) => {
+    setSelectGender(event.target.value);
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
     setFormErrors(validate(formValues));
-    setIsSubmit(true);
-    // const userData = {
-    //   firstName: formValues.firstName,
-    //   middle: formValues.middleName,
-    //   lastName: formValues.lastName,
-    //   email: formValues.email,
-    //   password: formValues.password,
-    //   dob: formValues.dob,
-    //   address: formValues.address,
-    //   city: formValues.city,
-    //   state: formValues.state,
-    //   country: formValues.country,
-    //   gender: formValues.gender,
-    //   interests: formValues.interests,
-    // };
-    // console.log(userData);
+    if (Object.keys(formErrors).length > 0) {
+      setIsSubmit(true);
+    }
   };
 
   const validate = (values) => {
@@ -104,196 +99,228 @@ const Main = (props) => {
   };
 
   return (
-    <>
-      <h2 style={{ color: "blue", textAlign: "center", marginTop: "-16px" }}>
-        Form Validation
-      </h2>
-      <div className={classes.mainContainer}>
-        <form className={classes.formContainer} onSubmit={submitHandler}>
-          <div className={classes.ipFields}>
-            <label for="name">First Name:-</label>
-
-            <input
-              type="text"
-              id="name"
-              name="firstName"
-              placeholder="ex:-Jonar"
-              value={formValues.firstName}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.firstName}</span>
-          <div className={classes.ipFields}>
-            <label for="mName">Middle Name:-</label>
-            <input
-              type="text"
-              id="mName"
-              name="middleName"
-              placeholder="ex:-Forilan"
-              value={formValues.middleName}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.middleName}</span>
-          <div className={classes.ipFields}>
-            <label for="lName">Last Name:-</label>
-            <input
-              type="text"
-              id="lName"
-              name="lastName"
-              placeholder="ex:-Kentaro"
-              value={formValues.lastName}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.lastName}</span>
-          <div className={classes.ipFields}>
-            <label for="gmail">Mail id:-</label>
-            <input
-              type="mail"
-              id="gmail"
-              name="email"
-              placeholder="ex:-kentaro@gmail.com"
-              value={formValues.email}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.email}</span>
-          <div className={classes.ipFields}>
-            <label for="password">Password:-</label>
-            <input
-              type="password"
-              name="password"
-              value={formValues.password}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.password}</span>
-          <div className={classes.ipFields}>
-            <label for="repwd">Re-Password:-</label>
-            <input
-              type="password"
-              id="repwd"
-              name="reEnterPwd"
-              value={formValues.reEnterPwd}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.reEnterPwd}</span>
-          <div className={classes.ipFields}>
-            <label for="dob">Date of Birth:-</label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={formValues.dob}
-              onChange={changeValHandler}
-            />
-          </div>
-          <span className={classes.err}>{formErrors.dob}</span>
-          <div className={classes.ipFields}>
-            <label for="gender">Gender:-</label>
-            <div className={classes.radiobtn}>
-              <input
-                type="radio"
-                name="gender"
-                required
-                style={{ width: "20px", height: "18px" }}
-                value={formValues.gender}
-                onChange={changeValHandler}
-              />
-              <label for="radio">Male</label>
-            </div>
-            <div className={classes.radiobtn}>
-              <input
-                type="radio"
-                name="gender"
-                required
-                style={{ width: "20px", height: "18px" }}
-              />
-              <label for="radio">Female</label>
-            </div>
-            <div className={classes.radiobtn}>
-              <input
-                type="radio"
-                name="gender"
-                required
-                style={{ width: "20px", height: "18px" }}
-              />
-              <label for="radio">Transgender</label>
-            </div>
-          </div>
-          <div className={classes.ipFields}>
-            <label>interests:-</label>
-            <div id={classes.checkboxContainer}>
-              <Interests
-                changeValHandler={changeValHandler}
-                formValues={formValues}
-                interests={props.interests}
-              />
-            </div>
-          </div>
-
-          <div className={classes.ipFields}>
-            <label for="address">Address:-</label>
-            <textarea
-              rows="4"
-              cols="30"
-              required
-              value={formValues.address}
-              onChange={changeValHandler}
-            />
-          </div>
-
-          <div className={classes.ipFields}>
-            <label for="city">City:-</label>
-            <input
-              type="text"
-              id="city"
-              required
-              value={formValues.city}
-              onChange={changeValHandler}
-            />
-          </div>
-
-          <div className={classes.ipFields}>
-            <label>County:-</label>
-
-            <select>
-              {props.countries.map((item) => {
-                return (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className={classes.ipFields}>
-            <label for="state">State:-</label>
-            <input
-              type="text"
-              id="state"
-              required
-              value={formValues.state}
-              onChange={changeValHandler}
-            />
-          </div>
-
-          <ContactDetails />
-          <button
-            type="submit"
-            className={classes.btnSubmit}
-            onClick={() => {
-              navigate("showdata-to-user");
-            }}
+    <Fragment>
+      {!isSubmit && (
+        <>
+          <h2
+            style={{ color: "blue", textAlign: "center", marginTop: "-16px" }}
           >
-            Submit
-          </button>
-        </form>
-        <ShowData datas={formValues} />
-      </div>
-    </>
+            Form Validation
+          </h2>
+          <div className={classes.mainContainer}>
+            <form className={classes.formContainer} onSubmit={submitHandler}>
+              <div className={classes.ipFields}>
+                <label for="name">First Name:-</label>
+
+                <input
+                  type="text"
+                  id="name"
+                  name="firstName"
+                  required
+                  placeholder="ex:-Jonar"
+                  value={formValues.firstName}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.firstName}</span>
+              <div className={classes.ipFields}>
+                <label for="mName">Middle Name:-</label>
+                <input
+                  type="text"
+                  id="mName"
+                  name="middleName"
+                  placeholder="ex:-Forilan"
+                  value={formValues.middleName}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.middleName}</span>
+              <div className={classes.ipFields}>
+                <label for="lName">Last Name:-</label>
+                <input
+                  type="text"
+                  id="lName"
+                  name="lastName"
+                  required
+                  placeholder="ex:-Kentaro"
+                  value={formValues.lastName}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.lastName}</span>
+              <div className={classes.ipFields}>
+                <label for="gmail">Mail id:-</label>
+                <input
+                  type="mail"
+                  id="gmail"
+                  name="email"
+                  required
+                  placeholder="ex:-kentaro@gmail.com"
+                  value={formValues.email}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.email}</span>
+              <div className={classes.ipFields}>
+                <label for="password">Password:-</label>
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  value={formValues.password}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.password}</span>
+              <div className={classes.ipFields}>
+                <label for="repwd">Re-Password:-</label>
+                <input
+                  type="password"
+                  id="repwd"
+                  name="reEnterPwd"
+                  required
+                  value={formValues.reEnterPwd}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.reEnterPwd}</span>
+              <div className={classes.ipFields}>
+                <label for="dob">Date of Birth:-</label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  required
+                  value={formValues.dob}
+                  onChange={changeValHandler}
+                />
+              </div>
+              <span className={classes.err}>{formErrors.dob}</span>
+              <div className={classes.ipFields}>
+                <label for="gender">Gender:-</label>
+                <div className={classes.radiobtn}>
+                  <input
+                    type="radio"
+                    name="gender"
+                    required
+                    style={{ width: "20px", height: "18px" }}
+                    value="Male"
+                    onChange={genderHandler}
+                  />
+                  <label for="radio">Male</label>
+                </div>
+                <div className={classes.radiobtn}>
+                  <input
+                    type="radio"
+                    name="gender"
+                    required
+                    style={{ width: "20px", height: "18px" }}
+                    value="Female"
+                    onChange={genderHandler}
+                  />
+                  <label for="radio">Female</label>
+                </div>
+                <div className={classes.radiobtn}>
+                  <input
+                    type="radio"
+                    name="gender"
+                    required
+                    style={{ width: "20px", height: "18px" }}
+                    value="Others"
+                    onChange={genderHandler}
+                  />
+                  <label for="radio">Others</label>
+                </div>
+              </div>
+
+              <Interest
+                interests={props.interests}
+                userInterest={userInterest}
+                setUserInterest={setUserInterest}
+              />
+              <div className={classes.ipFields}>
+                <label for="address">Address:-</label>
+                <textarea
+                  rows="4"
+                  cols="30"
+                  name="address"
+                  required
+                  value={formValues.address}
+                  onChange={changeValHandler}
+                />
+              </div>
+
+              <div className={classes.ipFields}>
+                <label for="city">City:-</label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  required
+                  value={formValues.city}
+                  onChange={changeValHandler}
+                />
+              </div>
+
+              <div className={classes.ipFields}>
+                <label>County:-</label>
+
+                <select
+                  value={selectCountry}
+                  onChange={(e) => setSelectCountry(e.target.value)}
+                >
+                  {props.countries.map((item) => {
+                    return (
+                      <option
+                        key={item}
+                        name="country"
+                        onChange={changeValHandler}
+                      >
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className={classes.ipFields} style={{ marginTop: "3px" }}>
+                <label for="state">State:-</label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  required
+                  value={formValues.state}
+                  onChange={changeValHandler}
+                />
+              </div>
+
+              <ContactDetails
+                setInputList={setInputList}
+                phNo={phNo}
+                inputList={inputList}
+                setPhNo={setPhNo}
+              />
+
+              <button type="submit" className={classes.btnSubmit}>
+                Submit
+              </button>
+            </form>
+          </div>
+        </>
+      )}
+      <>
+        {isSubmit && (
+          <ShowData
+            datas={formValues}
+            selectCountry={selectCountry}
+            selectGender={selectGender}
+            userInterest={userInterest}
+            phNo={phNo}
+            inputList={inputList}
+          />
+        )}
+      </>
+    </Fragment>
   );
 };
 
